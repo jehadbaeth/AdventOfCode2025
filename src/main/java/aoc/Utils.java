@@ -84,9 +84,7 @@ public class Utils {
         }
 
         /**
-         * @param <A>  The argument type
          * @param <R>  The return type
-         * @param memo a map that you must allocate for holding the memoized results
          * @param s    the lambda with the code of the function, e.g.
          *             long fib(long n) { return Util.memoize(() -> n <= 1 ? 1 : fib(n - 1) + fib(n - 2), n); }
          *             Just write the function without memoization, then add
