@@ -11,7 +11,7 @@ public class Day07Test {
     @Test
     public void testPart1(){
         // Given
-        String expected = "Result:21";
+        String expected = "Result:1656";
 
         // When
         String result = new Day07().part1(input);

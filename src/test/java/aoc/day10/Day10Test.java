@@ -23,7 +23,7 @@ public class Day10Test {
         String expected = "33";
 
         // When
-        String result = new Day10().part2(input);
+        String result = new Day10().part2(testInput);
 
         // Then
         assertEquals(expected, result);

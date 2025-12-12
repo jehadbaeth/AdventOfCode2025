@@ -21,7 +21,7 @@ public class Day08Test {
     public void testPart2(){
         // When
         String result = new Day08().part2(input);
-        String expected = "25272";
+        String expected = "36045012";
         // Then
         assertEquals(expected, result);
     }

@@ -1,28 +1,115 @@
 package aoc;
 
-import java.io.IOException;
-import java.io.UncheckedIOException;
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.net.URL;
-import java.net.http.HttpClient;
-import java.net.http.HttpRequest;
-import java.net.http.HttpResponse;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.time.LocalDate;
-import java.time.Month;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
 
-import static java.nio.charset.StandardCharsets.UTF_8;
+import java.nio.file.Path;
+import java.util.*;
+import java.util.concurrent.Callable;
+import java.util.function.BiPredicate;
+import java.util.function.Supplier;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class Utils {
-    
+
     public static List<String> splitLines(String input) {
         return Arrays.asList(input.split(System.lineSeparator()));
     }
 
+// TODO Polygon volume https://en.m.wikipedia.org/wiki/Shoelace_formula
+
+    public class Util {
+        public static boolean logging = true;
+        public static int margin = 100;
+        private static HashMap<List<?>, Object> memo = new HashMap<>();
+
+        public static String reversed(String s) {
+            return new StringBuilder(s).reverse().toString();
+        }
+
+        public static <T> Comparator<T> comparatorFromOrder(BiPredicate<T, T> order) {
+            return (x, y) -> x.equals(y) ? 0 : order.test(x, y) ? -1 : 1;
+        }
+
+        public static List<Integer> parseIntegers(String line) {
+            return parseIntegers(line, "[^0-9+-]");
+        }
+
+        // TODO parse empty-line separated blocks
+
+        public static List<Integer> parseIntegers(String line, String separatorRegex) {
+            return Stream.of(line.split(separatorRegex)).filter(l -> !l.isEmpty()).map(Integer::parseInt).toList();
+        }
+
+        public static List<Long> parseLongs(String line) {
+            return parseLongs(line, "[^0-9+-]");
+        }
+
+        public static List<Long> parseLongs(String line, String separatorRegex) {
+            return Stream.of(line.split(separatorRegex)).filter(l -> !l.isEmpty()).map(Long::parseLong).toList();
+        }
+
+        public static Path inputPath(String suffix) {
+            StackWalker walker = StackWalker.getInstance(StackWalker.Option.RETAIN_CLASS_REFERENCE);
+            String day = walker.walk(s -> s.filter(f -> f.getMethodName().equals("main")).findFirst()).get().getClassName().replaceAll("\\D", "");
+            return Path.of("inputs/input" + day + suffix);
+        }
+
+        public static Path outputPath(String suffix) {
+            StackWalker walker = StackWalker.getInstance(StackWalker.Option.RETAIN_CLASS_REFERENCE);
+            String day = walker.walk(s -> s.filter(f -> f.getMethodName().equals("main")).findFirst()).get().getClassName().replaceAll("\\D", "");
+            return Path.of("outputs/output" + day + suffix);
+        }
+
+        public static void log(Object... objects) {
+            if (logging)
+                System.out.println(Stream.of(objects).map(Util::format).collect(Collectors.joining(" ")));
+        }
+
+        public static String format(Object object) {
+            var s = object == null ? "null" : object.toString();
+            return switch (object) {
+                case Collection<?> values -> s.length() <= margin ? s
+                        : "[\n " + values.stream().map(Util::format).collect(Collectors.joining(",\n ")) + "]";
+                case Map<?, ?> values -> s.length() <= margin ? s
+                        : "{\n " + values.entrySet().stream().map(Util::format).collect(Collectors.joining(",\n ")) + "}";
+                case Map.Entry<?, ?> e -> s.length() <= margin ? s
+                        : Util.format(e.getKey()) + "=\n" + Util.format(e.getValue());
+                case null -> "null";
+                default -> s;
+            };
+        }
+
+        public static void resetMemo() {
+            memo = new HashMap<>();
+        }
+
+        /**
+         * @param <A>  The argument type
+         * @param <R>  The return type
+         * @param memo a map that you must allocate for holding the memoized results
+         * @param s    the lambda with the code of the function, e.g.
+         *             long fib(long n) { return Util.memoize(() -> n <= 1 ? 1 : fib(n - 1) + fib(n - 2), n); }
+         *             Just write the function without memoization, then add
+         *             return Util.memoize(() -> { ... }, arg1, arg2, ...)
+         * @param args the arguments
+         *             CAUTION: If you memoize more than one function, add a unique key as the initial arg
+         *             CAUTION: If the memoized code captures mutable state, reset the memo when the state changes
+         * @return the result of s
+         */
+        public static <R> R memoize(Supplier<R> s, Object... args) {
+            List<?> a = List.of(args);
+            @SuppressWarnings("unchecked") R r = (R) memo.get(a);
+            if (r == null) {
+                r = s.get();
+                memo.put(a, r);
+            }
+            return r;
+        }
+
+        public static void time(Callable<?> t) throws Exception {
+            long start = System.nanoTime();
+            System.out.println(t.call());
+            System.out.printf("%.3f sec%n", (System.nanoTime() - start) / 1E9);
+        }
+    }
 }

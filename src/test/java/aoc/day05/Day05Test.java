@@ -44,7 +44,7 @@ public class Day05Test {
 
         // When
         String result = new Day05().part1(input);
-        String expected = "Count of Fresh Ingredients: 3";
+        String expected = "Count: 690";
         // Then
         assertEquals(expected, result);
     }

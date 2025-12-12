@@ -34,7 +34,7 @@ public class Day04Test {
     @Test
     public void testPart2(){
         // Given
-        String expectedResult = "Moveable rolls count: 43";
+        String expectedResult = "Moveable rolls count: 9609";
 
         // When
         String result = new Day04().part2(input);

@@ -6,6 +6,37 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class Day03Test {
+        @Test
+    public void testPart1(){
+        // Given
+//        String input = """
+//                987654321111111
+//                811111111111119
+//                234234234234278
+//                818181911112111""";
+        // When
+        String result = new Day03().part1(input);
+        String expected = "Highest Jolt: 17144";
+
+        // Then
+        assertEquals(expected, result);
+    }
+
+    @Test
+    public void testPart2(){
+        // Given
+//        String input = """
+//                987654321111111
+//                811111111111119
+//                234234234234278
+//                818181911112111""";
+        // When
+        String result = new Day03().part2(input);
+
+        // Then
+        String expected ="Highest Jolt: 170371185255900";
+        assertEquals(expected, result);
+    }
     public String input  = """
                 1222222312332225132221222322223222212123112122221122321222132212122312222221212112222322211112122222
                 1345446423422232333442846252125241622734244225359323445433441754253232142272634482426733122226243425
@@ -207,36 +238,4 @@ public class Day03Test {
                 2322353332422513334235125325633252242233252413323412222522323325155334324223233211523224223352123324
                 5313436256323342326122534332142462233522466423222235523454546145825561325814532466226535435225486422
                 5434443545444364645323442442456213744146245265734444415252259444643332333464442244443545345639431334""";
-
-    @Test
-    public void testPart1(){
-        // Given
-//        String input = """
-//                987654321111111
-//                811111111111119
-//                234234234234278
-//                818181911112111""";
-        // When
-        String result = new Day03().part1(input);
-        String expected = "Highest Jolt: 17144";
-
-        // Then
-        assertEquals(expected, result);
-    }
-
-    @Test
-    public void testPart2(){
-        // Given
-//        String input = """
-//                987654321111111
-//                811111111111119
-//                234234234234278
-//                818181911112111""";
-        // When
-        String result = new Day03().part2(input);
-
-        // Then
-        String expected ="Highest Jolt: 170371185255900";
-        assertEquals(expected, result);
-    }
 }
